@@ -1,6 +1,6 @@
 FROM amazoncorretto:17
 LABEL authors="https://saifurtech.us/"
-RUN ./mvnw -f pom.xml clean package
+CMD ./mvnw -f pom.xml clean package
 ARG JAR_FILE=target/locale-app.jar
 COPY ${JAR_FILE} locale-app.jar
 EXPOSE 8080
