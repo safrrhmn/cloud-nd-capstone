@@ -1,5 +1,6 @@
 package com.saifurtech.locale.util;
 
+import com.saifurtech.locale.AwsSecretReader;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
@@ -17,18 +18,18 @@ import java.util.Map;
 @Configuration
 public class ZipcodeBaseRestClient {
 
-    @Value("${zipcodebase.apikey}")
-    private String apikey;
-
+    @Autowired
+    private AwsSecretReader awsSecretReader;
 
     @Autowired
     RestTemplate restTemplate;
 
     public <T> ResponseEntity<T> get(String url, Map<String, String> params, T responseType) {
         RequestEntity<?> requestEntity = null;
+        Map<String, String> secrets = awsSecretReader.getSecrets();
         try {
             HttpHeaders header = new HttpHeaders();
-            header.set("apiKey", apikey);
+            header.set("apiKey", secrets.get("zipcodebase.apikey"));
             requestEntity = new RequestEntity<>(header, HttpMethod.GET, new URI(url));
         } catch (URISyntaxException e) {
             throw new RuntimeException(e);

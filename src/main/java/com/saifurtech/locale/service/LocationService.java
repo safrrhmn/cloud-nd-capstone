@@ -2,6 +2,7 @@ package com.saifurtech.locale.service;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.saifurtech.locale.AwsSecretReader;
 import com.saifurtech.locale.dao.entity.Location;
 import com.saifurtech.locale.dao.entity.ZipCodesByCountryCityAndState;
 import com.saifurtech.locale.dto.PostalCodes;
@@ -26,8 +27,8 @@ public class LocationService {
     @Autowired
     private ZipcodeBaseRestClient zipcodeBaseRestClient;
 
-    @Value("${zipcodebase.url}")
-    private String zipCodeBaseUrl;
+    @Autowired
+    private AwsSecretReader awsSecretReader;
 
 
     public List<Location> locationByZipCode(String zipCode) {
@@ -43,9 +44,10 @@ public class LocationService {
     }
 
     private List<Location> getLocationsFromZipCodeBase(String zipCode) {
+        Map<String, String> secrets = awsSecretReader.getSecrets();
         Map<String, String> params = new LinkedHashMap<>();
         params.put("codes", zipCode);
-        ResponseEntity<?> locationResponseEntity = zipcodeBaseRestClient.get(zipCodeBaseUrl + "/search", params, new String());
+        ResponseEntity<?> locationResponseEntity = zipcodeBaseRestClient.get(secrets.get("zipcodebase.url") + "/search", params, new String());
         String body = Objects.requireNonNull(locationResponseEntity.getBody()).toString();
         List<Location> locations;
         try {
@@ -76,11 +78,12 @@ public class LocationService {
 
 
     private PostalCodes getZipcodesByCountryStateAndCity(String country, String state, String city) {
+        Map<String, String> secrets = awsSecretReader.getSecrets();
         Map<String, String> params = new LinkedHashMap<>();
         params.put("city", city);
         params.put("state", state);
         params.put("country", country);
-        ResponseEntity<?> locationResponseEntity = zipcodeBaseRestClient.get(zipCodeBaseUrl + "/code/city",
+        ResponseEntity<?> locationResponseEntity = zipcodeBaseRestClient.get(secrets.get("zipcodebase.url") + "/code/city",
                 params, new PostalCodes());
 
         return (PostalCodes) locationResponseEntity.getBody();
