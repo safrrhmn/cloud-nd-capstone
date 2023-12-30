@@ -1,0 +1,26 @@
+type Query {
+    locationByZipCode(zipCode: String): [Location]
+}
+
+type Location {
+    id: ID
+    postalCode: String
+    countryCode: String
+    latitude: String
+    longitude: String
+    city: String
+    state: String
+    cityEnglish: String
+    stateEnglish: String
+    province: String
+    provinceCode: String
+    allPostalCodes: PostalCodes
+}
+
+type PostalCodes {
+    id: ID!
+    city: String
+    state: String
+    country: String
+    allZipCodes: [String]
+}
