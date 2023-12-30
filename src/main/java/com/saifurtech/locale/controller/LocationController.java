@@ -2,7 +2,6 @@ package com.saifurtech.locale.controller;
 
 import com.saifurtech.locale.dao.entity.Location;
 import com.saifurtech.locale.dao.entity.ZipCodesByCountryCityAndState;
-import com.saifurtech.locale.dto.PostalCodes;
 import com.saifurtech.locale.service.LocationService;
 import lombok.extern.slf4j.Slf4j;
 import org.jetbrains.annotations.NotNull;
