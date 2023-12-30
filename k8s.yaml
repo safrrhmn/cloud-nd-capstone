@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: locale
+spec:
+  selector:
+    matchLabels:
+      app: locale
+  template:
+    metadata:
+      labels:
+        app: locale
+    spec:
+      containers:
+        - name: locale
+          image: 111111111111.dkr.ecr.us-east-2.amazonaws.com/locale:latest
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - name: tcp
+              containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: locale
+spec:
+  selector:
+    app: locale
+  ports:
+    - port: 80
+      targetPort: 8080
+  type: LoadBalancer
