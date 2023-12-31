@@ -16,9 +16,11 @@ on:
 env:
   # Use docker.io for Docker Hub if empty
   REGISTRY: docker.io
+  ECR_REPOSITORY: safrrhmn/cloud-nd-capstone
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   AWS_REGION: us-east-1
+  EKS_CLUSTER_NAME: capstone
 
 
 jobs:
@@ -120,5 +122,5 @@ jobs:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           IMAGE_TAG: ${{ steps.commit.outputs.short }}
         run: |
-          sed -i.bak "s|DOCKER_IMAGE|$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" && \
+          sed -i.bak "s|DOCKER_IMAGE|$REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" && \
           kubectl apply -f k8s.yaml
