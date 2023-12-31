@@ -13,6 +13,12 @@ spec:
     spec:
       containers:
         - name: locale
+          env:
+          - name: ZIPCODEBASE_API_KEY
+            valueFrom:
+              secretKeyRef:
+                name: api-secret
+                key: zipcodebase_apikey
           image: safrrhmn/cloud-nd-capstone:master
           resources:
             limits:
