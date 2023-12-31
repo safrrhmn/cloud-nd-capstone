@@ -80,4 +80,4 @@ jobs:
         uses: ianbelcher/eks-kubectl-action@master
         with:
           cluster_name: ${{ env.CLUSTER_NAME }}
-          args: set image --record deployment/locale locale=master
+          args: set image --record deployment/locale locale=locale
