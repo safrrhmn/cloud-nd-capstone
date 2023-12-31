@@ -80,4 +80,4 @@ jobs:
         uses: ianbelcher/eks-kubectl-action@master
         with:
           cluster_name: ${{ secrets.CLUSTER_NAME }}
-          args: set image --record deployment/pod-name pod-name=${{ steps.build.outputs.IMAGE_URL }}
+          args: set image --record deployment/locale locale=${{ steps.build.outputs.IMAGE_URL }}
