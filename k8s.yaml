@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: locale
-          image: safrrhmn/cloud-nd-capstone:latest
+          image: safrrhmn/cloud-nd-capstone:master
           resources:
             limits:
               memory: "128Mi"

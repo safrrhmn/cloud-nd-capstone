@@ -116,19 +116,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: deploy to cluster
-        uses: kodermax/kubectl-aws-eks@main
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-          ECR_REGISTRY: ${{ env.REGISTRY }}
-          ECR_REPOSITORY: ${{ env.DOCKER_REPOSITORY }}
-          IMAGE_TAG: ${{ steps.meta.outputs.tags }}
-        with:
-          args: set image deployment capstone=docker.io/safrrhmn/cloud-nd-capstone:latest --all
-
-      - name: verify deployment
-        uses: kodermax/kubectl-aws-eks@main
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-        with:
-          args: rollout status deployment/my-app
+      - name: Update Kube Config
+        run: aws eks update-kubeconfig --name capstone --region us-east-1
+      - name: Deploy to EKS
+        run: kubectl apply -f k8s.yaml
