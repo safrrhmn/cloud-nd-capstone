@@ -13,7 +13,7 @@ spec:
     spec:
       containers:
         - name: locale
-          image: 111111111111.dkr.ecr.us-east-2.amazonaws.com/locale:latest
+          image: safrrhmn/cloud-nd-capstone:latest
           resources:
             limits:
               memory: "128Mi"
