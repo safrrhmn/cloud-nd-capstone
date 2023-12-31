@@ -20,7 +20,7 @@ env:
   # github.repository as <account>/<repo>
   IMAGE_NAME: ${{ github.repository }}
   AWS_REGION: us-east-1
-  EKS_CLUSTER_NAME: my-eks-cluster
+  CLUSTER_NAME: my-eks-cluster
 
 
 jobs:
@@ -105,23 +105,14 @@ jobs:
         # This step uses the identity token to provision an ephemeral certificate
         # against the sigstore community Fulcio instance.
         run: echo "${TAGS}" | xargs -I {} cosign sign --yes {}@${DIGEST}
-      - name: Configure AWS credentials
+      - name: AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.EKS_KEY }}
           aws-secret-access-key: ${{ secrets.EKS_SECRET }}
-          aws-region: us-east-1
-
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
-
-      - name: deploy to cluster
-        uses: kodermax/kubectl-aws-eks@main
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: locale
-          IMAGE_TAG: "master"
+          aws-region: ${{ env.aws_region }}
+      - name: Build and push CONTAINER_NAME
+        uses: ianbelcher/eks-kubectl-action@master
         with:
-          args: set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          cluster_name: ${{ secrets.CLUSTER_NAME }}
+          args: set image --record deployment/pod-name pod-name=${{ steps.build.outputs.IMAGE_URL }}
