@@ -20,13 +20,10 @@ spec:
                 name: api-secret
                 key: zipcodebase_apikey
           image: safrrhmn/cloud-nd-capstone:master
-          resources:
-            limits:
-              memory: "128Mi"
-              cpu: "500m"
           ports:
             - name: tcp
               containerPort: 8080
+          imagePullPolicy: IfNotPresent
 ---
 apiVersion: v1
 kind: Service

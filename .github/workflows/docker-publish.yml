@@ -12,7 +12,7 @@ env:
   DOCKER_REPOSITORY: safrrhmn/cloud-nd-capstone
   IMAGE_NAME: ${{ github.repository }}
   AWS_REGION: us-east-1
-  CLUSTER_NAME: my-eks-cluster
+  CLUSTER_NAME: capstone-1
 
 jobs:
   build:

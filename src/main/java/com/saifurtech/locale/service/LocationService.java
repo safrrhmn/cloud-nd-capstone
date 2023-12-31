@@ -7,10 +7,10 @@ import com.saifurtech.locale.dao.entity.ZipCodesByCountryCityAndState;
 import com.saifurtech.locale.dto.PostalCodes;
 import com.saifurtech.locale.repo.LocaleRepo;
 import com.saifurtech.locale.util.ZipcodeBaseRestClient;
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.configurationprocessor.json.JSONException;
-import org.springframework.boot.configurationprocessor.json.JSONObject;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
