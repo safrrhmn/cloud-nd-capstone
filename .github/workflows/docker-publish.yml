@@ -122,9 +122,9 @@ jobs:
           KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
           ECR_REGISTRY: ${{ env.REGISTRY }}
           ECR_REPOSITORY: ${{ env.DOCKER_REPOSITORY }}
-          IMAGE_TAG: "master"
+          IMAGE_TAG: ${{ steps.meta.outputs.tags }}
         with:
-          args: set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          args: set image deployment capstone=docker.io/safrrhmn/cloud-nd-capstone:latest --all
 
       - name: verify deployment
         uses: kodermax/kubectl-aws-eks@main
