@@ -119,8 +119,8 @@ jobs:
 
       - name: Deploy to EKS
         env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          IMAGE_TAG: ${{ steps.commit.outputs.short }}
+          ECR_REGISTRY: ${{ env.REGISTRY }}
+          IMAGE_TAG: latest
         run: |
           sed -i.bak "s|DOCKER_IMAGE|$REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG|g" && \
           kubectl apply -f k8s.yaml
