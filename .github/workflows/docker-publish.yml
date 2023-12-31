@@ -111,16 +111,24 @@ jobs:
           aws-access-key-id: ${{ secrets.EKS_KEY }}
           aws-secret-access-key: ${{ secrets.EKS_SECRET }}
           aws-region: ${{env.AWS_REGION}}
+
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
-      - name: Update kube config
-        run: aws eks update-kubeconfig --name $EKS_CLUSTER_NAME --region $AWS_REGION
 
-      - name: Deploy to EKS
+      - name: deploy to cluster
+        uses: kodermax/kubectl-aws-eks@main
         env:
-          REGISTRY: ${{ env.REGISTRY }}
-          IMAGE_TAG: latest
-        run: |
-          sed -i.bak "s|DOCKER_IMAGE|$REGISTRY/$DOCKER_REPOSITORY:$IMAGE_TAG|g" && \
-          kubectl apply -f k8s.yaml
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+          ECR_REGISTRY: ${{ env.REGISTRY }}
+          ECR_REPOSITORY: ${{ env.DOCKER_REPOSITORY }}
+          IMAGE_TAG: ${{ steps.meta.outputs.tags }}
+        with:
+          args: set image deployment/$ECR_REPOSITORY $ECR_REPOSITORY=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+
+      - name: verify deployment
+        uses: kodermax/kubectl-aws-eks@main
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.KUBE_CONFIG_DATA }}
+        with:
+          args: rollout status deployment/my-app
